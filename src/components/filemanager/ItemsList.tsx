@@ -11,7 +11,7 @@ export declare interface itemProp {
 
 declare interface ItemsListProps {
   content: itemProp[]
-  updateHandler: (id:string) => any
+  updateHandler: (itemInfo: itemProp) => any
 }
 
 export default function ItemsList (props: ItemsListProps) {
@@ -20,7 +20,7 @@ export default function ItemsList (props: ItemsListProps) {
   return <>
     <ul>
       {content.map((item, index) => (
-        <li key={index} onClick={() => updateHandler(item.id)}>
+        <li key={index} onClick={() => updateHandler(item)}>
           {item.name}
         </li>
       ))}
