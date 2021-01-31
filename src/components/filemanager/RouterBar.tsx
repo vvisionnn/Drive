@@ -1,5 +1,6 @@
 import React from "react";
 import {itemProp} from "./ItemsList";
+import {Button, Divider, Toolbar, Typography} from "@material-ui/core";
 
 declare interface RouterBarProps {
   routes: itemProp[]
@@ -9,19 +10,23 @@ declare interface RouterBarProps {
 export default function RouterBar(props: RouterBarProps) {
   const {routes, updateContent} = props
 
-  return (
-    <div>
-      <button>home</button>
+  return <>
+    <Toolbar variant={"dense"}>
+      <Button>Home</Button>
       {routes.map((item, index) => {
         return (
-          <button
+          <Button
             key={index}
             onClick={() => updateContent(index)}
+            style={{maxWidth: "100px"}}
           >
-            {item.name}
-          </button>
+            <Typography noWrap>
+              {item.name}
+            </Typography>
+          </Button>
         )
       })}
-    </div>
-  )
+    </Toolbar>
+    <Divider/>
+  </>
 }

@@ -1,104 +1,97 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 
-import HomeView from "./views/Home";
-import axios from "axios";
+import clsx from 'clsx';
+import {makeStyles} from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import {Divider} from "@material-ui/core";
+import {useStatusApi} from "./api/api";
 import AuthView from "./views/Auth";
-import {AppBar, CssBaseline, makeStyles, Toolbar, Typography} from "@material-ui/core";
+import HomeView from "./views/Home";
 
-const useStyles = makeStyles(theme => ({
-  appContainer: {
-    width: "80%",
-    // marginTop: -20,
-    margin: "auto",
-    // backgroundColor: "yellow",
-    [theme.breakpoints.down('sm')]: {
-      width: "90%",
-    },
-    [theme.breakpoints.up('md')]: {
-      width: "60%",
-    },
-  },
-  appbar: {
-    // backgroundColor: "green",
-    height: "9vh",
-  },
-  appbarText: {
-    lineHeight: "50px",
-    [theme.breakpoints.up('xs')]: {
-      lineHeight: "40px",
-    },
-    [theme.breakpoints.up('sm')]: {
-      lineHeight: "55px",
-    },
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
   },
   toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
   },
-  Header: {
-    minHeight: "50px",
-    width: "50%",
-    margin: "auto",
-    boxShadow: "0px 3px 14px -2px rgba(0, 0, 0, 0.25)",
-    borderRadius: "100px",
-    textAlign:"center",
-    lineHeight:"100px",
-    // backgroundColor: "red"
-    [theme.breakpoints.up('xs')]: {
-      minHeight: "40px",
-      width: "50%",
-    },
-    [theme.breakpoints.up('sm')]: {
-      minHeight: "55px",
-      width: "50%",
-    },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
-  toolbarSpacer: {
-    height: "55px",
-    [theme.breakpoints.up('xs')]: {
-      height: "45px",
-    },
-    [theme.breakpoints.up('sm')]: {
-      height: "60px",
-    },
+  title: {
+    flexGrow: 1,
   },
-  content: {},
-}))
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  fileManager: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    paddingTop: theme.spacing(1),
+  },
+}));
+
 
 function App() {
-  const [loginStat, setLoginStat] = useState<boolean>(false)
+  const {status, statusLoading, isFetchStatusErr, doFetchStatus} = useStatusApi();
   const classes = useStyles();
 
   useEffect(() => {
-    axios.get("/api/auth/stat").then(resp => {
-      setLoginStat(resp
-        && resp.data
-        && resp.data['status']
-        && resp.data['status'] === "ok")
-    }).catch(err => {
-      console.log(`fetch status error: ${err}`)
-    })
+    doFetchStatus()
   }, [])
 
-
   return (
-    <>
-      <div className={classes.appContainer}>
-        <AppBar color={"transparent"} elevation={0} className={classes.appbar}>
-          <div className={classes.Header}>
-            <Typography className={classes.appbarText}>
-              Onedrive List Index
-            </Typography>
-          </div>
-        </AppBar>
-        <main className={classes.content}>
-          <div className={classes.toolbarSpacer} />
-          {loginStat
-            ? <HomeView />
-            : <AuthView />
-          }
-        </main>
-      </div>
-    </>
+    <div className={classes.root}>
+      <CssBaseline/>
+      <AppBar elevation={0} position="absolute" className={classes.appBarShift}>
+        <Toolbar className={classes.toolbar}>
+          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            Onedrive Share Index
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper),
+        }}
+      >
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer}/>
+        <Divider/>
+        {
+          !statusLoading && !isFetchStatusErr && status
+            ? <HomeView/>
+            : <AuthView/>
+        }
+      </main>
+    </div>
   );
 }
 

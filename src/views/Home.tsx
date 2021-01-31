@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import ItemsList from "../components/filemanager/ItemsList";
-import {itemProp} from "../components/filemanager/ItemsList"
+import ItemsList, {itemProp} from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
 
 export default function HomeView() {
@@ -19,10 +18,10 @@ export default function HomeView() {
       })
   }, [])
 
-  const updateItems = (itemInfo:itemProp, callback?: () => any) => {
+  const updateItems = (itemInfo: itemProp, callback?: () => any) => {
     axios.get("/api/drive", {
-        params: {"id": itemInfo.id}
-      })
+      params: {"id": itemInfo.id}
+    })
       .then(resp => {
         console.log(resp.data)
         setItems(resp.data['value'])
@@ -33,19 +32,23 @@ export default function HomeView() {
       })
   }
 
-  const addRoute = (itemInfo:itemProp) => {
-    updateItems(itemInfo, () => {setRoutes([...routes, itemInfo])})
+  const addRoute = (itemInfo: itemProp) => {
+    updateItems(itemInfo, () => {
+      setRoutes([...routes, itemInfo])
+    })
   }
 
   const removeRoute = (index: number) => {
-    updateItems(routes[index], () => {setRoutes([...routes.slice(0, index+1)])})
+    updateItems(routes[index], () => {
+      setRoutes([...routes.slice(0, index + 1)])
+    })
   }
 
 
   return (
     <div>
-      <RouterBar routes={routes} updateContent={removeRoute} />
-      <ItemsList content={items} updateHandler={addRoute} />
+      <RouterBar routes={routes} updateContent={removeRoute}/>
+      <ItemsList content={items} updateHandler={addRoute}/>
     </div>
   )
 }

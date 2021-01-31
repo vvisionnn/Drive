@@ -1,9 +1,10 @@
 import React from "react";
+import {List, ListItem, Typography} from "@material-ui/core";
 
 export declare interface itemProp {
   name: string,
   createdDateTime: Date,
-  folder: {childCount: number},
+  folder: { childCount: number },
   id: string,
   size: number,
   webUrl: string,
@@ -14,16 +15,18 @@ declare interface ItemsListProps {
   updateHandler: (itemInfo: itemProp) => any
 }
 
-export default function ItemsList (props: ItemsListProps) {
+export default function ItemsList(props: ItemsListProps) {
   const {content, updateHandler} = props
   console.log(content)
   return <>
-    <ul>
+    <List>
       {content.map((item, index) => (
-        <li key={index} onClick={() => updateHandler(item)}>
-          {item.name}
-        </li>
+        <ListItem button key={index}>
+          <Typography noWrap onClick={() => updateHandler(item)}>
+            {item.name}
+          </Typography>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   </>
 }
