@@ -9,12 +9,24 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import {Divider} from "@material-ui/core";
+import {ThemeProvider, createMuiTheme} from "@material-ui/core"
 import {useStatusApi} from "./api/api";
 import AuthView from "./views/Auth";
 import HomeView from "./views/Home";
 
 
 const drawerWidth = 240;
+
+const customTheme = createMuiTheme({
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+  },
+  palette: {
+
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,32 +78,27 @@ function App() {
   }, [])
 
   return (
-    <div className={classes.root}>
-      <CssBaseline/>
-      <AppBar elevation={0} position="absolute" className={classes.appBarShift}>
-        <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Onedrive Share Index
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper),
-        }}
-      >
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer}/>
-        <Divider/>
-        {
-          !statusLoading && !isFetchStatusErr && status
-            ? <HomeView/>
-            : <AuthView/>
-        }
-      </main>
-    </div>
+    <ThemeProvider theme={customTheme}>
+      <div className={classes.root}>
+        <CssBaseline/>
+        <AppBar elevation={0} position="absolute">
+          <Toolbar className={classes.toolbar}>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+              Onedrive Share Index
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer}/>
+          <Divider/>
+          {
+            !statusLoading && !isFetchStatusErr && status
+              ? <HomeView/>
+              : <AuthView/>
+          }
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 
