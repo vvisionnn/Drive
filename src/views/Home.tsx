@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ItemsList, { itemProp } from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
 import {useDriveListApi} from "../api/api";
+import Loading from "../components/loading/Loading";
 
 export default function HomeView() {
   const [routes, setRoutes] = useState<itemProp[]>([]);
@@ -36,7 +37,7 @@ export default function HomeView() {
         isFetchDriveErr
           ? <div>error</div>
           : driveLoading
-            ? <div>loading</div>
+            ? <Loading />
             : <ItemsList content={items} updateHandler={addRoute} />
       }
     </div>
