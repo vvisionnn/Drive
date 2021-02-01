@@ -23,7 +23,7 @@ const customTheme = createMuiTheme({
   palette: {
     primary: {
       // light?: string;
-      main: "#00695C",
+      main: "#092244",
       // dark?: string;
       // contrastText?: string;
     },
