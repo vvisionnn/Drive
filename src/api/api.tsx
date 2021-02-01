@@ -1,11 +1,19 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 
+import { itemProp } from "../components/filemanager/ItemsList";
+
+declare interface DriveItemParams {
+  id: string
+}
+
 const api = {
   fetchStatus: () => {
     return axios.get("/api/auth/stat");
   },
-};
+  fetchDrive: (params?: DriveItemParams) => {
+    return axios.get("/api/drive", params && { params })
+  }};
 
 const useStatusApi = () => {
   const [status, setStatus] = useState<boolean>(false);
@@ -37,4 +45,27 @@ const useStatusApi = () => {
   return { status, statusLoading, isFetchStatusErr, doFetchStatus };
 };
 
-export { useStatusApi };
+const useDriveListApi = () => {
+  const [items, setItems] = useState<itemProp[]>([]);
+  const [driveLoading, setDriveLoading] = useState<boolean>(false);
+  const [isFetchDriveErr, setIsFetchRootErr] = useState<boolean>(false);
+
+  const doFetchDrive = useCallback((params?: DriveItemParams) => {
+    setDriveLoading(true)
+    api.fetchDrive(params && params)
+      .then((resp) => {
+        console.log(resp.data);
+        setItems(resp.data["value"]);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsFetchRootErr(true)
+      }).finally(() => {
+        setDriveLoading(false)
+    })
+  }, [])
+
+  return { items, driveLoading, isFetchDriveErr, doFetchDrive }
+}
+
+export { useStatusApi, useDriveListApi};

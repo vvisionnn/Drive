@@ -1,37 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import ItemsList, { itemProp } from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
+import {useDriveListApi} from "../api/api";
 
 export default function HomeView() {
   const [routes, setRoutes] = useState<itemProp[]>([]);
-  const [items, setItems] = useState<itemProp[]>([]);
+
+  const { items, driveLoading, isFetchDriveErr, doFetchDrive } = useDriveListApi()
 
   useEffect(() => {
-    axios
-      .get("/api/drive")
-      .then((resp) => {
-        console.log(resp.data);
-        setItems(resp.data["value"]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    doFetchDrive()
+  }, [doFetchDrive]);
 
   const updateItems = (itemInfo: itemProp, callback?: () => any) => {
-    axios
-      .get("/api/drive", {
-        params: { id: itemInfo.id },
-      })
-      .then((resp) => {
-        console.log(resp.data);
-        setItems(resp.data["value"]);
-        callback && callback();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    doFetchDrive({ id: itemInfo.id })
+    callback && callback();
   };
 
   const addRoute = (itemInfo: itemProp) => {
@@ -49,7 +32,13 @@ export default function HomeView() {
   return (
     <div>
       <RouterBar routes={routes} updateContent={removeRoute} />
-      <ItemsList content={items} updateHandler={addRoute} />
+      {
+        isFetchDriveErr
+          ? <div>error</div>
+          : driveLoading
+            ? <div>loading</div>
+            : <ItemsList content={items} updateHandler={addRoute} />
+      }
     </div>
   );
 }
