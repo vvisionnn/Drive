@@ -19,7 +19,7 @@ export default function RouterBar(props: RouterBarProps) {
             <Button
               key={index}
               onClick={() => updateContent(index)}
-              style={{ maxWidth: "100px" }}
+              style={{ maxWidth: "150px" }}
             >
               <Typography noWrap>{item.name}</Typography>
             </Button>
