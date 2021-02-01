@@ -30,9 +30,14 @@ export default function HomeView() {
   };
 
   const removeRoute = (index: number) => {
-    updateItems(routes[index], () => {
-      setRoutes([...routes.slice(0, index + 1)]);
-    });
+    if (index >= 0) {
+      updateItems(routes[index], () => {
+        setRoutes([...routes.slice(0, index + 1)]);
+      })
+    } else {
+      doFetchDrive()
+      setRoutes([])
+    }
   };
 
   return (
