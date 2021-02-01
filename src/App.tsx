@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +20,17 @@ const customTheme = createMuiTheme({
       disableRipple: true,
     },
   },
-  palette: {},
+  palette: {
+    primary: {
+      // light?: string;
+      main: "#00695C",
+      // dark?: string;
+      // contrastText?: string;
+    },
+    secondary: {
+      main: "#1DE9B6"
+    }
+  },
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -96,11 +106,13 @@ function App() {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Divider />
-          {!statusLoading && !isFetchStatusErr && status ? (
-            <HomeView />
-          ) : (
-            <AuthView />
-          )}
+          {
+            isFetchStatusErr
+              ? <div>fetch error</div>
+              : statusLoading
+                ? <div>loading</div>
+                : status ? <HomeView /> : <AuthView />
+          }
         </main>
       </div>
     </ThemeProvider>
