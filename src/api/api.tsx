@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import axios from "axios";
 
 const api = {
@@ -12,7 +12,7 @@ const useStatusApi = () => {
   const [statusLoading, setStatusLoading] = useState<boolean>(false)
   const [isFetchStatusErr, setIsFetchStatusErr] = useState<boolean>(false)
 
-  const doFetchStatus = () => {
+  const doFetchStatus = useCallback(() => {
     setStatusLoading(true)
     api.fetchStatus().then(resp => {
       console.log(resp)
@@ -26,7 +26,7 @@ const useStatusApi = () => {
     }).finally(() => {
       setStatusLoading(false)
     })
-  }
+  },[])
 
   return {status, statusLoading, isFetchStatusErr, doFetchStatus};
 };
