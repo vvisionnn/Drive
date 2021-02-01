@@ -6,9 +6,8 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
-  IconButton,
+  IconButton, ListItemSecondaryAction,
 } from "@material-ui/core";
-import InfoRoundedIcon from "@material-ui/icons/InfoRounded";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import FolderRoundedIcon from "@material-ui/icons/FolderRounded";
 import InsertDriveFileRoundedIcon from "@material-ui/icons/InsertDriveFileRounded";
@@ -44,7 +43,7 @@ export default function ItemsList(props: ItemsListProps) {
     <>
       <List dense>
         {content.map((item, index) => (
-          <ListItem button disableRipple key={index}>
+          <ListItem button disableRipple key={index} onClick={() => updateHandler(item)}>
             <ListItemAvatar>
               <Avatar>
                 {item.folder ? (
@@ -54,17 +53,14 @@ export default function ItemsList(props: ItemsListProps) {
                 )}
               </Avatar>
             </ListItemAvatar>
-            <ListItemText onClick={() => updateHandler(item)}>
+            <ListItemText>
               <Typography noWrap>{item.name}</Typography>
             </ListItemText>
-            {item.file && (
-              <IconButton>
+            {item.file && <ListItemSecondaryAction>
+              <IconButton onClick={() => {console.log("clicked")}}>
                 <GetAppRoundedIcon />
               </IconButton>
-            )}
-            <IconButton>
-              <InfoRoundedIcon />
-            </IconButton>
+            </ListItemSecondaryAction>}
           </ListItem>
         ))}
       </List>
