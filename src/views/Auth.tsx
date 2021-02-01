@@ -10,7 +10,7 @@ import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   layer: {
-    height: "100vh",
+    // height: "100vh",
     display: "grid",
   },
   authCard: {

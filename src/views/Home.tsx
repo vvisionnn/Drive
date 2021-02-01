@@ -36,7 +36,7 @@ export default function HomeView() {
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: "800px", margin: "auto" }}>
       <RouterBar routes={routes} updateContent={removeRoute} />
       {isFetchDriveErr ? (
         <div>error</div>
