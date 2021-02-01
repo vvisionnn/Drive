@@ -28,8 +28,8 @@ const customTheme = createMuiTheme({
       // contrastText?: string;
     },
     secondary: {
-      main: "#1DE9B6"
-    }
+      main: "#1DE9B6",
+    },
   },
 });
 
@@ -106,13 +106,15 @@ function App() {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Divider />
-          {
-            isFetchStatusErr
-              ? <div>fetch error</div>
-              : statusLoading
-                ? <div>loading</div>
-                : status ? <HomeView /> : <AuthView />
-          }
+          {isFetchStatusErr ? (
+            <div>fetch error</div>
+          ) : statusLoading ? (
+            <div>loading</div>
+          ) : status ? (
+            <HomeView />
+          ) : (
+            <AuthView />
+          )}
         </main>
       </div>
     </ThemeProvider>

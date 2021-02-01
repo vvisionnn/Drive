@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import ItemsList, { itemProp } from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
-import {useDriveListApi} from "../api/api";
+import { useDriveListApi } from "../api/api";
 import Loading from "../components/loading/Loading";
 
 export default function HomeView() {
   const [routes, setRoutes] = useState<itemProp[]>([]);
 
-  const { items, driveLoading, isFetchDriveErr, doFetchDrive } = useDriveListApi()
+  const {
+    items,
+    driveLoading,
+    isFetchDriveErr,
+    doFetchDrive,
+  } = useDriveListApi();
 
   useEffect(() => {
-    doFetchDrive()
+    doFetchDrive();
   }, [doFetchDrive]);
 
   const updateItems = (itemInfo: itemProp, callback?: () => any) => {
-    doFetchDrive({ id: itemInfo.id })
+    doFetchDrive({ id: itemInfo.id });
     callback && callback();
   };
 
@@ -33,13 +38,13 @@ export default function HomeView() {
   return (
     <div>
       <RouterBar routes={routes} updateContent={removeRoute} />
-      {
-        isFetchDriveErr
-          ? <div>error</div>
-          : driveLoading
-            ? <Loading />
-            : <ItemsList content={items} updateHandler={addRoute} />
-      }
+      {isFetchDriveErr ? (
+        <div>error</div>
+      ) : driveLoading ? (
+        <Loading />
+      ) : (
+        <ItemsList content={items} updateHandler={addRoute} />
+      )}
     </div>
   );
 }

@@ -3,8 +3,10 @@ import axios from "axios";
 
 import { itemProp } from "../components/filemanager/ItemsList";
 
+// todo: add passwd verification for security
+
 declare interface DriveItemParams {
-  id: string
+  id: string;
 }
 
 const api = {
@@ -12,8 +14,9 @@ const api = {
     return axios.get("/api/auth/stat");
   },
   fetchDrive: (params?: DriveItemParams) => {
-    return axios.get("/api/drive", params && { params })
-  }};
+    return axios.get("/api/drive", params && { params });
+  },
+};
 
 const useStatusApi = () => {
   const [status, setStatus] = useState<boolean>(false);
@@ -51,21 +54,23 @@ const useDriveListApi = () => {
   const [isFetchDriveErr, setIsFetchRootErr] = useState<boolean>(false);
 
   const doFetchDrive = useCallback((params?: DriveItemParams) => {
-    setDriveLoading(true)
-    api.fetchDrive(params && params)
+    setDriveLoading(true);
+    api
+      .fetchDrive(params && params)
       .then((resp) => {
         console.log(resp.data);
         setItems(resp.data["value"]);
       })
       .catch((error) => {
         console.log(error);
-        setIsFetchRootErr(true)
-      }).finally(() => {
-        setDriveLoading(false)
-    })
-  }, [])
+        setIsFetchRootErr(true);
+      })
+      .finally(() => {
+        setDriveLoading(false);
+      });
+  }, []);
 
-  return { items, driveLoading, isFetchDriveErr, doFetchDrive }
-}
+  return { items, driveLoading, isFetchDriveErr, doFetchDrive };
+};
 
-export { useStatusApi, useDriveListApi};
+export { useStatusApi, useDriveListApi };

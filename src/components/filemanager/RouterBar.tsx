@@ -13,7 +13,9 @@ export default function RouterBar(props: RouterBarProps) {
   return (
     <>
       <Toolbar variant={"dense"}>
-        <Button><Typography noWrap>Home</Typography></Button>
+        <Button>
+          <Typography noWrap>Home</Typography>
+        </Button>
         {routes.map((item, index) => {
           return (
             <Button
