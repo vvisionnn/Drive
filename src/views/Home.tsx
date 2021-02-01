@@ -1,54 +1,55 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ItemsList, {itemProp} from "../components/filemanager/ItemsList";
+import ItemsList, { itemProp } from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
 
 export default function HomeView() {
-  const [routes, setRoutes] = useState<itemProp[]>([])
-  const [items, setItems] = useState<itemProp[]>([])
+  const [routes, setRoutes] = useState<itemProp[]>([]);
+  const [items, setItems] = useState<itemProp[]>([]);
 
   useEffect(() => {
-    axios.get("/api/drive")
-      .then(resp => {
-        console.log(resp.data)
-        setItems(resp.data['value'])
+    axios
+      .get("/api/drive")
+      .then((resp) => {
+        console.log(resp.data);
+        setItems(resp.data["value"]);
       })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const updateItems = (itemInfo: itemProp, callback?: () => any) => {
-    axios.get("/api/drive", {
-      params: {"id": itemInfo.id}
-    })
-      .then(resp => {
-        console.log(resp.data)
-        setItems(resp.data['value'])
-        callback && callback()
+    axios
+      .get("/api/drive", {
+        params: { id: itemInfo.id },
       })
-      .catch(error => {
-        console.log(error)
+      .then((resp) => {
+        console.log(resp.data);
+        setItems(resp.data["value"]);
+        callback && callback();
       })
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const addRoute = (itemInfo: itemProp) => {
     updateItems(itemInfo, () => {
-      setRoutes([...routes, itemInfo])
-    })
-  }
+      setRoutes([...routes, itemInfo]);
+    });
+  };
 
   const removeRoute = (index: number) => {
     updateItems(routes[index], () => {
-      setRoutes([...routes.slice(0, index + 1)])
-    })
-  }
-
+      setRoutes([...routes.slice(0, index + 1)]);
+    });
+  };
 
   return (
     <div>
-      <RouterBar routes={routes} updateContent={removeRoute}/>
-      <ItemsList content={items} updateHandler={addRoute}/>
+      <RouterBar routes={routes} updateContent={removeRoute} />
+      <ItemsList content={items} updateHandler={addRoute} />
     </div>
-  )
+  );
 }
