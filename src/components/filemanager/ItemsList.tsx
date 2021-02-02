@@ -32,6 +32,8 @@ export declare interface itemProp {
   id: string;
   size: number;
   webUrl: string;
+  // todo: change to custom property
+  "@microsoft.graph.downloadUrl"?: string
 }
 
 declare interface ItemsListProps {
@@ -81,9 +83,9 @@ export default function ItemsList(props: ItemsListProps) {
         {content.map((item, index) => (
           <>
             <ListItem
+              key={index}
               button
               disableRipple
-              key={index}
               onClick={() => updateHandler(item)}
               style={{
                 borderRadius: "10px"
@@ -109,7 +111,7 @@ export default function ItemsList(props: ItemsListProps) {
                 <ListItemSecondaryAction>
                   <IconButton
                     onClick={() => {
-                      console.log("clicked");
+                      window.open(item["@microsoft.graph.downloadUrl"])
                     }}
                   >
                     <GetAppRoundedIcon />
