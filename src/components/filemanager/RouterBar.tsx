@@ -35,7 +35,7 @@ export default function RouterBar(props: RouterBarProps) {
         </Button>
         {routes.map((item, index) => {
           return (
-            <span style={{ display: 'flex', alignItems: "center" }}>
+            <span key={index} style={{ display: 'flex', alignItems: "center" }}>
               <KeyboardArrowRightRoundedIcon />
               <Button
                 key={index}

@@ -13,6 +13,13 @@ const api = {
   fetchStatus: () => {
     return axios.get("/api/auth/stat");
   },
+  getAuthUrl: () => {
+    return axios.get("/api/auth/url", {
+      params: {
+        path: window.location.href,
+      },
+    });
+  },
   fetchDrive: (params?: DriveItemParams) => {
     return axios.get("/api/drive", params && { params });
   },
@@ -32,8 +39,8 @@ const useStatusApi = () => {
         setStatus(
           resp &&
             resp.data &&
-            resp.data["status"] &&
-            resp.data["status"] === "ok"
+            resp.data["message"] &&
+            resp.data["message"] === "ok"
         );
       })
       .catch((err) => {
@@ -59,7 +66,7 @@ const useDriveListApi = () => {
       .fetchDrive(params && params)
       .then((resp) => {
         console.log(resp.data);
-        setItems(resp.data["value"]);
+        setItems(resp.data.data["value"]);
       })
       .catch((error) => {
         console.log(error);
@@ -73,4 +80,5 @@ const useDriveListApi = () => {
   return { items, driveLoading, isFetchDriveErr, doFetchDrive };
 };
 
+export default api
 export { useStatusApi, useDriveListApi };

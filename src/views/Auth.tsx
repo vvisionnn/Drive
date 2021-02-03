@@ -6,7 +6,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import axios from "axios";
+import api from "../api/api"
 
 const useStyles = makeStyles((theme) => ({
   layer: {
@@ -23,15 +23,9 @@ export default function AuthView() {
   const handleAuth = () => {
     console.log("click");
 
-    axios
-      .get("/api/auth/url", {
-        params: {
-          path: window.location.href,
-        },
-      })
-      .then((resp) => {
+    api.getAuthUrl().then((resp) => {
         console.log(resp.data);
-        window.location.href = resp.data;
+        window.location.href = resp.data.data;
       })
       .catch((err) => {
         console.log(err);

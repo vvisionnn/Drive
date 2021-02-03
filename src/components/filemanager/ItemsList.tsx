@@ -81,9 +81,8 @@ export default function ItemsList(props: ItemsListProps) {
     <>
       <List dense style={{ padding: 0 }}>
         {content.map((item, index) => (
-          <>
+          <div key={index}>
             <ListItem
-              key={index}
               button
               disableRipple
               onClick={() => updateHandler(item)}
@@ -120,7 +119,7 @@ export default function ItemsList(props: ItemsListProps) {
               )}
             </ListItem>
             <Divider variant="inset" />
-          </>
+          </div>
         ))}
       </List>
     </>
