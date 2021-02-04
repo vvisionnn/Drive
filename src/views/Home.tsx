@@ -20,7 +20,7 @@ export default function HomeView() {
 
   const updateItems = (itemInfo: itemProp, callback?: () => any) => {
     console.log(itemInfo.id)
-    doFetchDrive({ id: itemInfo.id });
+    doFetchDrive(itemInfo.id);
     callback && callback();
   };
 

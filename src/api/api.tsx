@@ -5,10 +5,6 @@ import { itemProp } from "../components/filemanager/ItemsList";
 
 // todo: add passwd verification for security
 
-declare interface DriveItemParams {
-  id: string;
-}
-
 const api = {
   fetchStatus: () => {
     return axios.get("/api/auth/stat");
@@ -20,8 +16,8 @@ const api = {
       },
     });
   },
-  fetchDrive: (params?: DriveItemParams) => {
-    return axios.get("/api/drive", params && { params });
+  fetchDrive: (id?: string) => {
+    return axios.get(id ? `/api/drive/${id}` : "/api/drive");
   },
 };
 
@@ -60,10 +56,10 @@ const useDriveListApi = () => {
   const [driveLoading, setDriveLoading] = useState<boolean>(false);
   const [isFetchDriveErr, setIsFetchRootErr] = useState<boolean>(false);
 
-  const doFetchDrive = useCallback((params?: DriveItemParams) => {
+  const doFetchDrive = useCallback((id?: string) => {
     setDriveLoading(true);
     api
-      .fetchDrive(params && params)
+      .fetchDrive(id && id)
       .then((resp) => {
         console.log(resp.data);
         setItems(resp.data.data["value"]);
