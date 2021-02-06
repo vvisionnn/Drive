@@ -6,8 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { Divider } from "@material-ui/core";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { createMuiTheme, Divider, ThemeProvider } from "@material-ui/core";
 import { useStatusApi } from "./api/api";
 import AuthView from "./views/Auth";
 import HomeView from "./views/Home";
@@ -38,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    textAlign: "center"
+    textAlign: "center",
   },
   title: {
     flexGrow: 1,

@@ -6,7 +6,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import api from "../api/api"
+import api from "../api/api";
 
 const useStyles = makeStyles((theme) => ({
   layer: {
@@ -23,7 +23,9 @@ export default function AuthView() {
   const handleAuth = () => {
     console.log("click");
 
-    api.getAuthUrl().then((resp) => {
+    api
+      .getAuthUrl()
+      .then((resp) => {
         console.log(resp.data);
         window.location.href = resp.data.data;
       })

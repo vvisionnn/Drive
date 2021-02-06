@@ -19,7 +19,7 @@ export default function HomeView() {
   }, [doFetchDrive]);
 
   const updateItems = (itemInfo: itemProp, callback?: () => any) => {
-    console.log(itemInfo.id)
+    console.log(itemInfo.id);
     doFetchDrive(itemInfo.id);
     callback && callback();
   };
@@ -34,10 +34,10 @@ export default function HomeView() {
     if (index >= 0) {
       updateItems(routes[index], () => {
         setRoutes([...routes.slice(0, index + 1)]);
-      })
+      });
     } else {
-      doFetchDrive()
-      setRoutes([])
+      doFetchDrive();
+      setRoutes([]);
     }
   };
 

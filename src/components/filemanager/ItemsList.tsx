@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  List,
-  ListItem,
-  Typography,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  IconButton,
-  ListItemSecondaryAction,
-  Divider,
-} from "@material-ui/core";
-import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
+import { Paper, TableContainer } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import FolderRoundedIcon from "@material-ui/icons/FolderRounded";
 import InsertDriveFileRoundedIcon from "@material-ui/icons/InsertDriveFileRounded";
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,7 +27,7 @@ export declare interface itemProp {
   size: number;
   webUrl: string;
   // todo: change to custom property
-  "@microsoft.graph.downloadUrl"?: string
+  "@microsoft.graph.downloadUrl"?: string;
 }
 
 declare interface ItemsListProps {
@@ -42,86 +36,115 @@ declare interface ItemsListProps {
 }
 
 const useStyles = makeStyles((theme) => ({
-  folderAvatar: {
-    color: "rgba(246, 205, 138, 1)",
+  tableContainer: {
+    width: "100%",
+  },
+  tableCell: {
+    maxWidth: 0,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
+  row: {
+    // width: "100%"
+  },
+  rowIcon: {
+    marginRight: theme.spacing(2),
+    verticalAlign: "middle",
     backgroundColor: "transparent",
   },
-  fileAvatar: {
+  rowNameContainer: {
+    width: "80%",
+  },
+  rowSizeContainer: {
+    width: "20%",
+  },
+  // rowDownloadIconContainer: {
+  //   width: "10%"
+  // },
+  folderIcon: {
+    color: "rgba(246, 205, 138, 1)",
+  },
+  fileIcon: {
     color: theme.palette.grey.A200,
-    backgroundColor: "transparent",
   },
 }));
 
-function humanFileSize(bytes: number, si=false, dp=1) {
+function humanFileSize(bytes: number, si = false, dp = 1) {
   const thresh = si ? 1000 : 1024;
 
   if (Math.abs(bytes) < thresh) {
-    return bytes + ' B';
+    return bytes + " B";
   }
 
   const units = si
-    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+    : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
   let u = -1;
-  const r = 10**dp;
+  const r = 10 ** dp;
 
   do {
     bytes /= thresh;
     ++u;
-  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+  } while (
+    Math.round(Math.abs(bytes) * r) / r >= thresh &&
+    u < units.length - 1
+  );
 
-
-  return bytes.toFixed(dp) + ' ' + units[u];
+  return bytes.toFixed(dp) + " " + units[u];
 }
 
 export default function ItemsList(props: ItemsListProps) {
   const { content, updateHandler } = props;
   const classes = useStyles();
+
   return (
-    <>
-      <List dense style={{ padding: 0 }}>
-        {content.map((item, index) => (
-          <div key={index}>
-            <ListItem
-              button
-              disableRipple
-              onClick={() => updateHandler(item)}
-              style={{
-                borderRadius: "10px"
-              }}
-            >
-              <ListItemAvatar>
-                {item.folder ? (
-                  <Avatar className={classes.folderAvatar}>
-                    <FolderRoundedIcon fontSize={"large"} />
-                  </Avatar>
-                ) : (
-                  <Avatar className={classes.fileAvatar}>
-                    <InsertDriveFileRoundedIcon fontSize={"large"} />
-                  </Avatar>
-                )}
-              </ListItemAvatar>
-              <ListItemText
-                // todo: noWrap
-                primary={<Typography noWrap>{item.name}</Typography>}
-                secondary={`Size: ${humanFileSize(item.size)}`}
-              />
-              {item.file && (
-                <ListItemSecondaryAction>
-                  <IconButton
-                    onClick={() => {
-                      window.open(item["@microsoft.graph.downloadUrl"])
-                    }}
-                  >
-                    <GetAppRoundedIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              )}
-            </ListItem>
-            <Divider variant="inset" />
-          </div>
-        ))}
-      </List>
-    </>
+    <TableContainer component={Paper} className={classes.tableContainer}>
+      <Table size={"small"}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Size</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody style={{ width: "100%" }}>
+          {content &&
+            content.map((item, index) => (
+              <TableRow
+                key={index}
+                hover
+                className={classes.row}
+                onClick={() => updateHandler(item)}
+              >
+                <TableCell
+                  className={`${classes.rowNameContainer} ${classes.tableCell}`}
+                >
+                  {item.folder ? (
+                    <FolderRoundedIcon
+                      className={`${classes.rowIcon} ${classes.folderIcon}`}
+                    />
+                  ) : (
+                    <InsertDriveFileRoundedIcon
+                      className={`${classes.rowIcon} ${classes.fileIcon}`}
+                    />
+                  )}
+                  {item.name}
+                </TableCell>
+                <TableCell
+                  className={`${classes.rowSizeContainer} ${classes.tableCell}`}
+                >
+                  {humanFileSize(item.size)}
+                </TableCell>
+                {/*<TableCell align="left" className={classes.rowDownloadIconContainer}>*/}
+                {/*  {item.file && (*/}
+                {/*  <IconButton size={"small"} onClick={() => {window.open(item["@microsoft.graph.downloadUrl"])}}>*/}
+                {/*    <GetAppRoundedIcon />*/}
+                {/*  </IconButton>)}*/}
+                {/*</TableCell>*/}
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
