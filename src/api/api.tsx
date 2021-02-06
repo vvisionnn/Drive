@@ -23,7 +23,7 @@ const api = {
 
 const useStatusApi = () => {
   const [status, setStatus] = useState<boolean>(false);
-  const [statusLoading, setStatusLoading] = useState<boolean>(false);
+  const [statusLoading, setStatusLoading] = useState<boolean>(true);
   const [isFetchStatusErr, setIsFetchStatusErr] = useState<boolean>(false);
 
   const doFetchStatus = useCallback(() => {
