@@ -2,13 +2,10 @@ import React, {useState} from "react";
 import {
   ClickAwayListener,
   Collapse,
-  Card,
   MenuItem,
   MenuList,
   Paper,
   TableContainer,
-  Grow,
-  Menu
 } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -170,36 +167,34 @@ export default function ItemsList(props: ItemsListProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {content &&
-            content.map((item, index) => (
-
-                <TableRow
-                  key={index}
-                  onContextMenu={handleRightClick}
-                  hover
-                  className={classes.row}
-                  onDoubleClick={() => updateHandler(item)}
+            {content && content.map((item, index) => (
+              <TableRow
+                key={index}
+                onContextMenu={handleRightClick}
+                hover
+                className={classes.row}
+                onDoubleClick={() => updateHandler(item)}
+              >
+                <TableCell
+                  className={`${classes.rowNameContainer} ${classes.tableCell}`}
                 >
-                  <TableCell
-                    className={`${classes.rowNameContainer} ${classes.tableCell}`}
-                  >
-                    {item.folder ? (
-                      <FolderRoundedIcon
-                        className={`${classes.rowIcon} ${classes.folderIcon}`}
-                      />
-                    ) : (
-                      <InsertDriveFileRoundedIcon
-                        className={`${classes.rowIcon} ${classes.fileIcon}`}
-                      />
-                    )}
-                    {item.name}
-                  </TableCell>
-                  <TableCell
-                    className={`${classes.rowSizeContainer} ${classes.tableCell}`}
-                  >
-                    {humanFileSize(item.size)}
-                  </TableCell>
-                </TableRow>
+                  {item.folder ? (
+                    <FolderRoundedIcon
+                      className={`${classes.rowIcon} ${classes.folderIcon}`}
+                    />
+                  ) : (
+                    <InsertDriveFileRoundedIcon
+                      className={`${classes.rowIcon} ${classes.fileIcon}`}
+                    />
+                  )}
+                  {item.name}
+                </TableCell>
+                <TableCell
+                  className={`${classes.rowSizeContainer} ${classes.tableCell}`}
+                >
+                  {humanFileSize(item.size)}
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
@@ -210,7 +205,7 @@ export default function ItemsList(props: ItemsListProps) {
       touchEvent={"onTouchStart"}
       onClickAway={handleClose}
     >
-      <div
+      <Paper
         style={{
           position: "fixed",
           top: mouseState.mouseY,
@@ -218,18 +213,16 @@ export default function ItemsList(props: ItemsListProps) {
         }}
       >
         <Collapse in={mouseState.status}>
-          <Paper>
-            <MenuList>
-              <MenuItem onClick={handleClose}>Placeholder</MenuItem>
-              <MenuItem onClick={handleClose}>
-                {mouseState.value.type ? "Folder" : "File"}
-              </MenuItem>
-              <MenuItem onClick={handleClose}>Highlight</MenuItem>
-              <MenuItem onClick={handleClose}>Email</MenuItem>
-            </MenuList>
-          </Paper>
+          <MenuList>
+            <MenuItem onClick={handleClose}>Placeholder</MenuItem>
+            <MenuItem onClick={handleClose}>
+              {mouseState.value.type ? "Folder" : "File"}
+            </MenuItem>
+            <MenuItem onClick={handleClose}>Highlight</MenuItem>
+            <MenuItem onClick={handleClose}>Email</MenuItem>
+          </MenuList>
         </Collapse>
-      </div>
+      </Paper>
     </ClickAwayListener>
   </>
 }
