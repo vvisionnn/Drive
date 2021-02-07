@@ -1,6 +1,15 @@
 import React, {useState} from "react";
-import { Paper, TableContainer } from "@material-ui/core";
-import { Menu, MenuItem } from "@material-ui/core";
+import {
+  ClickAwayListener,
+  Collapse,
+  Card,
+  MenuItem,
+  MenuList,
+  Paper,
+  TableContainer,
+  Grow,
+  Menu
+} from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -34,12 +43,6 @@ export declare interface itemProp {
 declare interface ItemsListProps {
   content: itemProp[];
   updateHandler: (itemInfo: itemProp) => any;
-}
-
-declare interface MouseStateProp {
-  mouseX: null | number;
-  mouseY: null | number;
-  type: null | boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -108,33 +111,56 @@ function humanFileSize(bytes: number, si = false, dp = 1) {
   return bytes.toFixed(dp) + " " + units[u];
 }
 
-const contextInitialState: MouseStateProp = {
-  mouseX: null,
-  mouseY: null,
-  type: null,
+declare interface ContextMenuValue {
+  type: boolean; // 0 => folder; 1 => file
+}
+
+declare interface ContextMenuProp {
+  status: boolean;
+  mouseX: number;
+  mouseY: number;
+  value: ContextMenuValue;
 }
 
 export default function ItemsList(props: ItemsListProps) {
   const { content, updateHandler } = props;
-  const [mouseState, setMouseState] = useState<MouseStateProp>(contextInitialState)
+  const [mouseState, setMouseState] = useState<ContextMenuProp>({
+    status: false,
+    mouseX: 0,
+    mouseY: 0,
+    value: {
+      type: false
+    }
+  });
   const classes = useStyles();
 
   const handleRightClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log((event.target as Element).className.split(" "))
+    console.log(event.target)
+    const iconElement = (event.target as Element).getElementsByTagName("svg")[0]
     setMouseState({
+      status: true,
       mouseX: event.clientX,
       mouseY: event.clientY,
-      type: (event.target as Element).className.split(" ").indexOf("folder") !== -1
+      value: {
+        type: iconElement.classList.value.indexOf("folder") !== -1
+      }
     });
   }
 
   const handleClose = () => {
-    setMouseState(contextInitialState);
+    setMouseState({
+      ...mouseState,
+      status: false,
+    });
   };
 
-  return (
-    <div onContextMenu={handleRightClick}>
+  return <>
+    <ClickAwayListener
+      mouseEvent={"onMouseDown"}
+      touchEvent={"onTouchStart"}
+      onClickAway={handleClose}
+    >
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table size={"small"}>
           <TableHead>
@@ -145,12 +171,14 @@ export default function ItemsList(props: ItemsListProps) {
           </TableHead>
           <TableBody>
             {content &&
-              content.map((item, index) => (
+            content.map((item, index) => (
+
                 <TableRow
                   key={index}
+                  onContextMenu={handleRightClick}
                   hover
                   className={classes.row}
-                  onClick={() => updateHandler(item)}
+                  onDoubleClick={() => updateHandler(item)}
                 >
                   <TableCell
                     className={`${classes.rowNameContainer} ${classes.tableCell}`}
@@ -172,31 +200,36 @@ export default function ItemsList(props: ItemsListProps) {
                     {humanFileSize(item.size)}
                   </TableCell>
                 </TableRow>
-              ))}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Menu
-        keepMounted
-        open={mouseState.mouseY !== null}
-        onClose={handleClose}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          mouseState.mouseY !== null && mouseState.mouseX !== null
-            ? { top: mouseState.mouseY, left: mouseState.mouseX }
-            : undefined
-        }
+    </ClickAwayListener>
+    <ClickAwayListener
+      mouseEvent={"onMouseDown"}
+      touchEvent={"onTouchStart"}
+      onClickAway={handleClose}
+    >
+      <div
+        style={{
+          position: "fixed",
+          top: mouseState.mouseY,
+          left: mouseState.mouseX,
+        }}
       >
-        {
-          mouseState.type
-            ? (<MenuItem>Folder</MenuItem>)
-            : (<MenuItem>File</MenuItem>)
-        }
-        <MenuItem onClick={handleClose}>Copy</MenuItem>
-        <MenuItem onClick={handleClose}>Print</MenuItem>
-        <MenuItem onClick={handleClose}>Highlight</MenuItem>
-        <MenuItem onClick={handleClose}>Email</MenuItem>
-      </Menu>
-    </div>
-  );
+        <Collapse in={mouseState.status}>
+          <Paper>
+            <MenuList>
+              <MenuItem onClick={handleClose}>Placeholder</MenuItem>
+              <MenuItem onClick={handleClose}>
+                {mouseState.value.type ? "Folder" : "File"}
+              </MenuItem>
+              <MenuItem onClick={handleClose}>Highlight</MenuItem>
+              <MenuItem onClick={handleClose}>Email</MenuItem>
+            </MenuList>
+          </Paper>
+        </Collapse>
+      </div>
+    </ClickAwayListener>
+  </>
 }
