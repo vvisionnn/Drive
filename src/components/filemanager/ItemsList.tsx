@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     // width: "100%"
+    userSelect: "none"
   },
   rowIcon: {
     marginRight: theme.spacing(2),
@@ -55,9 +56,15 @@ const useStyles = makeStyles((theme) => ({
   },
   rowNameContainer: {
     width: "80%",
+    [theme.breakpoints.down("xs")]: {
+      width: "70%"
+    }
   },
   rowSizeContainer: {
     width: "20%",
+    [theme.breakpoints.down("xs")]: {
+      width: "30%"
+    }
   },
   // rowDownloadIconContainer: {
   //   width: "10%"
