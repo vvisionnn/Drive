@@ -3,6 +3,7 @@ import ItemsList, { itemProp } from "../components/filemanager/ItemsList";
 import RouterBar from "../components/filemanager/RouterBar";
 import { useDriveListApi } from "../api/api";
 import Loading from "../components/loading/Loading";
+import EmptyFolder from "../components/filemanager/EmptyFolder";
 
 export default function HomeView() {
   const [routes, setRoutes] = useState<itemProp[]>([]);
@@ -48,9 +49,9 @@ export default function HomeView() {
         <div>error</div>
       ) : driveLoading ? (
         <Loading />
-      ) : (
-        <ItemsList content={items} updateHandler={addRoute} />
-      )}
+      ) : items.length > 0
+          ? <ItemsList content={items} updateHandler={addRoute} />
+          : <EmptyFolder />}
     </div>
   );
 }
