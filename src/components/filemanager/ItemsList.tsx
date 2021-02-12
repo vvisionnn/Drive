@@ -35,6 +35,7 @@ export declare interface itemProp {
   webUrl: string;
   // todo: change to custom property
   "@microsoft.graph.downloadUrl"?: string;
+  selected: boolean
 }
 
 declare interface ItemsListProps {
@@ -124,10 +125,16 @@ export default function ItemsList(props: ItemsListProps) {
     value: null
   });
   const classes = useStyles();
+  const [selectedRow, setSelectedRow] = useState<number>(-1)
+
+  const handleSelect = (index: number) => {
+    setSelectedRow(selectedRow === index ? -1 : index)
+  }
 
   const handleRightClick = (event: React.MouseEvent<HTMLDivElement>, item: itemProp) => {
     event.preventDefault();
     // console.log(event.target)
+    setSelectedRow(content.indexOf(item))
     setMouseState({
       status: true,
       mouseX: event.clientX,
@@ -137,6 +144,7 @@ export default function ItemsList(props: ItemsListProps) {
   }
 
   const handleClose = () => {
+    setSelectedRow(-1)
     setMouseState({
       ...mouseState,
       status: false,
@@ -162,9 +170,11 @@ export default function ItemsList(props: ItemsListProps) {
             <TableRow
               key={index}
               onContextMenu={e => { handleRightClick(e, item) }}
-              // hover
+              hover={ !mouseState.status }
+              selected={selectedRow === index}
               className={classes.row}
               onDoubleClick={() => updateHandler(item)}
+              onClick={ () => { handleSelect(index) }}
             >
               <TableCell
                 className={`${classes.rowNameContainer} ${classes.tableCell}`}
