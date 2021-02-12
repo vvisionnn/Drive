@@ -49,9 +49,11 @@ export default function HomeView() {
         <div>error</div>
       ) : driveLoading ? (
         <Loading />
-      ) : items.length > 0
-          ? <ItemsList content={items} updateHandler={addRoute} />
-          : <EmptyFolder />}
+      ) : items.length > 0 ? (
+        <ItemsList content={items} updateHandler={addRoute} />
+      ) : (
+        <EmptyFolder />
+      )}
     </div>
   );
 }

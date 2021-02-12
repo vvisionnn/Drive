@@ -1,9 +1,5 @@
-import React, {useState} from "react";
-import {
-  ClickAwayListener,
-  Paper,
-  TableContainer,
-} from "@material-ui/core";
+import React, { useState } from "react";
+import { ClickAwayListener, Paper, TableContainer } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -14,7 +10,7 @@ import InsertDriveFileRoundedIcon from "@material-ui/icons/InsertDriveFileRounde
 import { makeStyles } from "@material-ui/core/styles";
 import ContextMenu from "./ContextMenu";
 import GetAppRounded from "@material-ui/icons/GetAppRounded";
-import ArrowForwardRoundedIcon from '@material-ui/icons/ArrowForwardRounded';
+import ArrowForwardRoundedIcon from "@material-ui/icons/ArrowForwardRounded";
 
 declare interface fileProp {
   hashes: { quickXorHash: string };
@@ -35,7 +31,7 @@ export declare interface itemProp {
   webUrl: string;
   // todo: change to custom property
   "@microsoft.graph.downloadUrl"?: string;
-  selected: boolean
+  selected: boolean;
 }
 
 declare interface ItemsListProps {
@@ -55,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   row: {
     // width: "100%"
-    userSelect: "none"
+    userSelect: "none",
   },
   rowIcon: {
     marginRight: theme.spacing(2),
@@ -65,14 +61,14 @@ const useStyles = makeStyles((theme) => ({
   rowNameContainer: {
     width: "80%",
     [theme.breakpoints.down("xs")]: {
-      width: "70%"
-    }
+      width: "70%",
+    },
   },
   rowSizeContainer: {
     width: "20%",
     [theme.breakpoints.down("xs")]: {
-      width: "30%"
-    }
+      width: "30%",
+    },
   },
   // rowDownloadIconContainer: {
   //   width: "10%"
@@ -122,102 +118,127 @@ export default function ItemsList(props: ItemsListProps) {
     status: false,
     mouseX: 0,
     mouseY: 0,
-    value: null
+    value: null,
   });
   const classes = useStyles();
-  const [selectedRow, setSelectedRow] = useState<number>(-1)
+  const [selectedRow, setSelectedRow] = useState<number>(-1);
 
   const handleSelect = (index: number) => {
-    setSelectedRow(selectedRow === index ? -1 : index)
-  }
+    setSelectedRow(selectedRow === index ? -1 : index);
+  };
 
-  const handleRightClick = (event: React.MouseEvent<HTMLDivElement>, item: itemProp) => {
+  const handleRightClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    item: itemProp
+  ) => {
     event.preventDefault();
     // console.log(event.target)
-    setSelectedRow(content.indexOf(item))
+    setSelectedRow(content.indexOf(item));
     setMouseState({
       status: true,
       mouseX: event.clientX,
       mouseY: event.clientY,
-      value: item
+      value: item,
     });
-  }
+  };
 
   const handleClose = () => {
-    setSelectedRow(-1)
+    setSelectedRow(-1);
     setMouseState({
       ...mouseState,
       status: false,
     });
   };
 
-  return <>
-    <ClickAwayListener
-      mouseEvent={"onMouseDown"}
-      touchEvent={"onTouchStart"}
-      onClickAway={handleClose}
-    >
-      <TableContainer component={Paper} className={classes.tableContainer}>
-      <Table size={"small"}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Size</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {content && content.map((item, index) => (
-            <TableRow
-              key={index}
-              onContextMenu={e => { handleRightClick(e, item) }}
-              hover={ !mouseState.status }
-              selected={selectedRow === index}
-              className={classes.row}
-              onDoubleClick={() => updateHandler(item)}
-              onClick={ () => { handleSelect(index) }}
-            >
-              <TableCell
-                className={`${classes.rowNameContainer} ${classes.tableCell}`}
-              >
-                {item.folder ? (
-                  <FolderRoundedIcon
-                    className={`${classes.rowIcon} ${classes.folderIcon}`}
-                  />
-                ) : (
-                  <InsertDriveFileRoundedIcon
-                    className={`${classes.rowIcon} ${classes.fileIcon}`}
-                  />
-                )}
-                {item.name}
-              </TableCell>
-              <TableCell
-                className={`${classes.rowSizeContainer} ${classes.tableCell}`}
-              >
-                {humanFileSize(item.size)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </ClickAwayListener>
-    <ContextMenu
-      open={mouseState.status}
-      position={{X: mouseState.mouseX, Y: mouseState.mouseY}}
-      dense={true}
-      items={[
-        {
-          icon: mouseState.value && mouseState.value.folder ? <ArrowForwardRoundedIcon /> : <GetAppRounded />,
-          name: mouseState.value && mouseState.value.folder ? "Enter" : "Download",
-          handleClick: mouseState.value && mouseState.value.folder
-            ? () => {mouseState.value && updateHandler(mouseState.value)}
-            : () => {window.open(mouseState.value?.["@microsoft.graph.downloadUrl"])}
-        },
-        {name: "Placeholder",},
-        {name: "Placeholder",},
-      ]}
-      contextMinWidth={300}
-      handleClose={handleClose}
-    />
-  </>
+  return (
+    <>
+      <ClickAwayListener
+        mouseEvent={"onMouseDown"}
+        touchEvent={"onTouchStart"}
+        onClickAway={handleClose}
+      >
+        <TableContainer component={Paper} className={classes.tableContainer}>
+          <Table size={"small"}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Size</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {content &&
+                content.map((item, index) => (
+                  <TableRow
+                    key={index}
+                    onContextMenu={(e) => {
+                      handleRightClick(e, item);
+                    }}
+                    hover={!mouseState.status}
+                    selected={selectedRow === index}
+                    className={classes.row}
+                    onDoubleClick={() => updateHandler(item)}
+                    onClick={() => {
+                      handleSelect(index);
+                    }}
+                  >
+                    <TableCell
+                      className={`${classes.rowNameContainer} ${classes.tableCell}`}
+                    >
+                      {item.folder ? (
+                        <FolderRoundedIcon
+                          className={`${classes.rowIcon} ${classes.folderIcon}`}
+                        />
+                      ) : (
+                        <InsertDriveFileRoundedIcon
+                          className={`${classes.rowIcon} ${classes.fileIcon}`}
+                        />
+                      )}
+                      {item.name}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.rowSizeContainer} ${classes.tableCell}`}
+                    >
+                      {humanFileSize(item.size)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </ClickAwayListener>
+      <ContextMenu
+        open={mouseState.status}
+        position={{ X: mouseState.mouseX, Y: mouseState.mouseY }}
+        dense={true}
+        items={[
+          {
+            icon:
+              mouseState.value && mouseState.value.folder ? (
+                <ArrowForwardRoundedIcon />
+              ) : (
+                <GetAppRounded />
+              ),
+            name:
+              mouseState.value && mouseState.value.folder
+                ? "Enter"
+                : "Download",
+            handleClick:
+              mouseState.value && mouseState.value.folder
+                ? () => {
+                    mouseState.value && updateHandler(mouseState.value);
+                  }
+                : () => {
+                    window.open(
+                      mouseState.value?.["@microsoft.graph.downloadUrl"]
+                    );
+                  },
+          },
+          { name: "Placeholder" },
+          { name: "Placeholder" },
+        ]}
+        contextMinWidth={300}
+        handleClose={handleClose}
+      />
+    </>
+  );
 }

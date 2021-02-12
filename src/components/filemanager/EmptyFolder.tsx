@@ -1,9 +1,9 @@
 import React from "react";
-import FolderOpenRoundedIcon from '@material-ui/icons/FolderOpenRounded';
-import {makeStyles} from "@material-ui/core/styles";
-import {Typography} from "@material-ui/core";
+import FolderOpenRoundedIcon from "@material-ui/icons/FolderOpenRounded";
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   layer: {
     width: "100%",
     height: "100%",
@@ -19,18 +19,22 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     opacity: "0.75",
   },
-}))
+}));
 
 export default function EmptyFolder() {
   const classes = useStyles();
-  return <>
-    <div className={classes.layer}>
-      <div className={classes.text}>
-        <Typography>
-          <div><FolderOpenRoundedIcon className={classes.icon} /></div>
-          <div>This is an empty folder</div>
-        </Typography>
+  return (
+    <>
+      <div className={classes.layer}>
+        <div className={classes.text}>
+          <Typography>
+            <div>
+              <FolderOpenRoundedIcon className={classes.icon} />
+            </div>
+            <div>This is an empty folder</div>
+          </Typography>
+        </div>
       </div>
-    </div>
-  </>
+    </>
+  );
 }
