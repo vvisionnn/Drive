@@ -123,6 +123,40 @@ export default function ItemsList(props: ItemsListProps) {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState<number>(-1);
 
+  const contextMenuItems = [
+    {
+      icon:
+        mouseState.value && mouseState.value.folder ? (
+          <ArrowForwardRoundedIcon />
+        ) : (
+          <GetAppRounded />
+        ),
+      name:
+        mouseState.value && mouseState.value.folder
+          ? "Enter"
+          : "Download",
+      handleClick:
+        mouseState.value && mouseState.value.folder
+          ? () => {
+            mouseState.value && updateHandler(mouseState.value);
+          }
+          : () => {
+            window.open(
+              mouseState.value?.["@microsoft.graph.downloadUrl"]
+            );
+          },
+    },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+    { name: "Placeholder" },
+  ]
+
   const handleSelect = (index: number) => {
     setSelectedRow(selectedRow === index ? -1 : index);
   };
@@ -210,32 +244,7 @@ export default function ItemsList(props: ItemsListProps) {
         open={mouseState.status}
         position={{ X: mouseState.mouseX, Y: mouseState.mouseY }}
         dense={true}
-        items={[
-          {
-            icon:
-              mouseState.value && mouseState.value.folder ? (
-                <ArrowForwardRoundedIcon />
-              ) : (
-                <GetAppRounded />
-              ),
-            name:
-              mouseState.value && mouseState.value.folder
-                ? "Enter"
-                : "Download",
-            handleClick:
-              mouseState.value && mouseState.value.folder
-                ? () => {
-                    mouseState.value && updateHandler(mouseState.value);
-                  }
-                : () => {
-                    window.open(
-                      mouseState.value?.["@microsoft.graph.downloadUrl"]
-                    );
-                  },
-          },
-          { name: "Placeholder" },
-          { name: "Placeholder" },
-        ]}
+        items={contextMenuItems}
         contextMinWidth={300}
         handleClose={handleClose}
       />
