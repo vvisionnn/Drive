@@ -10,6 +10,7 @@ import { createMuiTheme, Divider, ThemeProvider } from "@material-ui/core";
 import { useStatusApi } from "./api/api";
 import AuthView from "./views/Auth";
 import HomeView from "./views/Home";
+import Loading from "./components/loading/Loading";
 
 const drawerWidth = 240;
 
@@ -100,7 +101,7 @@ function App() {
           {isFetchStatusErr ? (
             <div>fetch error</div>
           ) : statusLoading ? (
-            <div>loading</div>
+            <Loading />
           ) : status ? (
             <HomeView />
           ) : (
