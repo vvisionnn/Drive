@@ -143,7 +143,7 @@ export default function ItemsList(props: ItemsListProps) {
   };
 
   const handleClose = () => {
-    setSelectedRow(-1);
+    // setSelectedRow(-1);
     setMouseState({
       ...mouseState,
       status: false,
