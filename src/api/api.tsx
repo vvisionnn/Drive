@@ -5,9 +5,19 @@ import { itemProp } from "../components/filemanager/ItemsList";
 
 // todo: add passwd verification for security
 
+declare interface SetConfData {
+  client_id: string
+  client_secret: string
+  redirect_url: string
+  path: string
+}
+
 const api = {
   fetchStatus: () => {
     return axios.get("/api/auth/stat");
+  },
+  setConf: (data: SetConfData) => {
+    return axios.put("/api/auth/conf", data);
   },
   getAuthUrl: () => {
     return axios.get("/api/auth/url", {
@@ -76,5 +86,29 @@ const useDriveListApi = () => {
   return { items, driveLoading, isFetchDriveErr, doFetchDrive };
 };
 
+const useSetConfApi = () => {
+  const [confLoading, setConfLoading] = useState<boolean>(false);
+  const [isSetConfErr, setIsSetConfErr] = useState<boolean>(false);
+
+  const doSetConf = useCallback((data: SetConfData, redirect?: (url: string) => void) => {
+    setConfLoading(true);
+    api
+      .setConf(data)
+      .then((resp) => {
+        console.log(resp);
+        redirect && redirect(resp.data.data)
+      })
+      .catch((err) => {
+        console.log(`set config error: ${err}`);
+        setIsSetConfErr(true);
+      })
+      .finally(() => {
+        setConfLoading(false);
+      });
+  }, []);
+
+  return { confLoading, isSetConfErr, doSetConf };
+};
+
 export default api;
-export { useStatusApi, useDriveListApi };
+export { useStatusApi, useDriveListApi, useSetConfApi };
