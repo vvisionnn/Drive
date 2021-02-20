@@ -210,7 +210,7 @@ export default function ItemsList(props: ItemsListProps) {
                     hover={!mouseState.status}
                     selected={selectedRow === index}
                     className={classes.row}
-                    onDoubleClick={() => updateHandler(item)}
+                    onDoubleClick={() => { item.folder && updateHandler(item)}}
                     onClick={() => {
                       handleSelect(index);
                     }}
