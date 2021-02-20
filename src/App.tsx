@@ -11,6 +11,7 @@ import { useStatusApi } from "./api/api";
 import AuthView from "./views/Auth";
 import HomeView from "./views/Home";
 import Loading from "./components/loading/Loading";
+import Error from "./components/error/error";
 
 const drawerWidth = 240;
 
@@ -97,9 +98,9 @@ function App() {
         </AppBar>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Divider />
+          {/*<Divider />*/}
           {isFetchStatusErr ? (
-            <div>fetch error</div>
+            <Error text={"Fetch Status Error"} />
           ) : statusLoading ? (
             <Loading />
           ) : status ? (

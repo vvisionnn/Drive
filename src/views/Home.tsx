@@ -4,6 +4,7 @@ import RouterBar from "../components/filemanager/RouterBar";
 import { useDriveListApi } from "../api/api";
 import Loading from "../components/loading/Loading";
 import EmptyFolder from "../components/filemanager/EmptyFolder";
+import Error from "../components/error/error";
 
 export default function HomeView() {
   const [routes, setRoutes] = useState<itemProp[]>([]);
@@ -46,7 +47,7 @@ export default function HomeView() {
     <div style={{ maxWidth: "800px", margin: "auto" }}>
       <RouterBar routes={routes} updateContent={removeRoute} />
       {isFetchDriveErr ? (
-        <div>error</div>
+        <Error text={"List Error"} />
       ) : driveLoading ? (
         <Loading />
       ) : items.length > 0 ? (
