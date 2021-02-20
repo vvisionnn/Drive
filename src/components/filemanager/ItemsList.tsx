@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
   row: {
     // width: "100%"
     userSelect: "none",
+    cursor: "pointer",
   },
   rowIcon: {
     marginRight: theme.spacing(2),
@@ -70,9 +71,6 @@ const useStyles = makeStyles((theme) => ({
       width: "30%",
     },
   },
-  // rowDownloadIconContainer: {
-  //   width: "10%"
-  // },
   folderIcon: {
     color: "rgba(246, 205, 138, 1)",
   },
