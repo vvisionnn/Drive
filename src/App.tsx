@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useMemo} from "react";
 import "./App.css";
 
-import { makeStyles } from "@material-ui/core/styles";
+import {darken, lighten, makeStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { createMuiTheme, Divider, ThemeProvider } from "@material-ui/core";
+import {createMuiTheme, ThemeProvider, useMediaQuery} from "@material-ui/core";
 import { useStatusApi } from "./api/api";
 import AuthView from "./views/Auth";
 import HomeView from "./views/Home";
@@ -14,25 +14,6 @@ import Loading from "./components/loading/Loading";
 import Error from "./components/error/error";
 
 const drawerWidth = 240;
-
-const customTheme = createMuiTheme({
-  props: {
-    MuiButtonBase: {
-      disableRipple: true,
-    },
-  },
-  palette: {
-    primary: {
-      // light?: string;
-      main: "#092244",
-      // dark?: string;
-      // contrastText?: string;
-    },
-    secondary: {
-      main: "#1DE9B6",
-    },
-  },
-});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,6 +55,32 @@ function App() {
     doFetchStatus,
   } = useStatusApi();
   const classes = useStyles();
+
+  // Enabling Dark Mode according to system-wide setting
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const customTheme = useMemo(() => createMuiTheme({
+      props: {
+        MuiButtonBase: {
+          disableRipple: true,
+        },
+      },
+      palette: {
+        type: prefersDarkMode ? 'dark' : 'light',
+        primary: {
+          light: "#092244",
+          main: prefersDarkMode
+            ? lighten("#092244", 0.3)
+            : "#092244",
+          dark: darken("#092244", 0.3),
+          // contrastText?: string;
+        },
+        secondary: {
+          main: "#1DE9B6",
+        },
+      },
+    }),
+    [prefersDarkMode],
+  );
 
   useEffect(() => {
     doFetchStatus();
